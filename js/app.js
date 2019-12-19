@@ -103,17 +103,50 @@ function getCourseInfo(course) {
 
     // remove course from the dom
     function removeCourse(event) {
+        let course, courseId;
+        //remove from the DOM
         if (event.target.classList.contains('remove')) {
             event.target.parentElement.parentElement.remove();
+            course = event.target.parentElement.parentElement;
+            courseId = course.querySelector('a').getAttribute('data-id');
+
         }
+        // remove from the local storage
+        console.log(courseId);
+
+        // remove from local storage
+        removeCourseLocalStorage(courseId);
+        
     }
+    // remove from local storage
+    function removeCourseLocalStorage (id) {
+        // get the local storage data
+        let coursesLS = getCoursesFromStorage();
+
+        // loop throught the array and find the index to remove 
+        coursesLS.forEach(function  (courseLS, index) {
+            if (courseLS.id === id) {
+                    coursesLS.splice(index, 1);
+            }
+        });
+        // add the rest of the array
+        localStorage.setItem('courses', JSON.stringify(coursesLS));
+    }
+
+
     // clears the shoping cart
     function clearCart() {
         // shopingCartContent.innerHTML = '';
         while (shopingCartContent.firstChild) {
             shopingCartContent.removeChild(shopingCartContent.firstChild)
         }
+        // clear from local storage
+        clearLocalStorage();
 
+    }
+    // clear the whole local storage
+    function clearLocalStorage() {
+        localStorage.clear();
     }
 
     // load when documedent is ready and print courses into local storage
